@@ -7,7 +7,7 @@ library(httr)
 library(dplyr)
 library(NbClust)
 library(ggplot2)
-library(plotly)
+library(scatterplot3d)
 #my own client ID and secret for the sake of the operation of the code.
 clientID <- 'xxxxxxxxx'
 secret <- 'xxxxxxxxx'
@@ -89,4 +89,18 @@ pca_df <- as.data.frame(pca$x)
 pca_df$cluster <- as.character(cluster_group)
 ggplot(pca_df, aes(x = PC1, y = PC2, color = cluster)) + geom_point() + ggtitle("Clustered songs and their PC1, PC2 values")
 #3d plot 
-
+colors <- c("#F8766D", "#00BA38", "#619CFF")
+pca_df$colors <- rep(0,nrow(pca_df))
+for(i in 1:nrow(pca_df)) {
+  pca_df$colors[i] <- colors[cluster_group[i]]
+}
+scatterplot3d(pca_df$PC1,
+              pca_df$PC2,
+              pca_df$PC3,
+              color=pca_df$colors,
+              pch = 19,
+              xlab = "PC1",
+              ylab = "PC2",
+              zlab = "PC3",
+              main = "3D Scatterplot of PC1, PC2, PC3")
+#cluster data exploration 
