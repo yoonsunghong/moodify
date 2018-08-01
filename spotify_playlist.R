@@ -24,7 +24,7 @@ response_1 <- POST(
 mytoken <- content(response_1)$access_token
 ## creating ID's. For your own playlist, use your own values for these!
 playlistID <- "xxxxxxxxx"
-#my own userID here for the sake of the code running.
+#userid
 userID <- 'xxxxxxxxx'
 #token
 hv <- paste0('Bearer ', mytoken)
@@ -103,4 +103,41 @@ scatterplot3d(pca_df$PC1,
               ylab = "PC2",
               zlab = "PC3",
               main = "3D Scatterplot of PC1, PC2, PC3")
-#cluster data exploration 
+#dividing songs into clusters and creating playlist URI objects
+songs$cluster <- cluster_group
+cluster1 <- songs %>% filter(cluster == 1)
+cluster2 <- songs %>% filter(cluster == 2)
+cluster3 <- songs %>% filter(cluster == 3)
+cluster4 <- songs %>% filter(cluster == 4)
+playlist_cluster1 <- '2eiPgxPpLZWraUDfZTuQUH'
+playlist_cluster2 <- '5B6iTqPDh2hfy1WRrJ7THb'
+playlist_cluster3 <- '6FzBLsv7nO8cz89Htuvk2g'
+playlist_cluster4 <- '4XBqvYzZR4oan12aBMcKmz'
+#adding the songs by their clusters to designated playlists
+for(song in 1:nrow(cluster1)) {
+  URL_temp <- paste0('https://api.spotify.com/v1/users/', userID, 
+                     '/playlists/', playlist_cluster1, '/tracks?uris=spotify%3Atrack%3A', cluster1[song, "id"])
+  POST(url = URL_temp, add_headers(Authorization = hvmodify, scope = 'playlist-modify-public'
+  ))
+}
+for(song in 1:nrow(cluster2)) {
+  URL_temp <- paste0('https://api.spotify.com/v1/users/', userID, 
+                     '/playlists/', playlist_cluster2, '/tracks?uris=spotify%3Atrack%3A', cluster2[song, "id"])
+  POST(url = URL_temp, add_headers(Authorization = hvmodify, scope = 'playlist-modify-public'
+  ))
+}
+for(song in 1:nrow(cluster3)) {
+  URL_temp <- paste0('https://api.spotify.com/v1/users/', userID, 
+                     '/playlists/', playlist_cluster3, '/tracks?uris=spotify%3Atrack%3A', cluster3[song, "id"])
+  POST(url = URL_temp, add_headers(Authorization = hvmodify, scope = 'playlist-modify-public'
+  ))
+}
+for(song in 1:nrow(cluster4)) {
+  URL_temp <- paste0('https://api.spotify.com/v1/users/', userID, 
+                     '/playlists/', playlist_cluster4, '/tracks?uris=spotify%3Atrack%3A', cluster4[song, "id"])
+  POST(url = URL_temp, add_headers(Authorization = hvmodify, scope = 'playlist-modify-public'
+  ))
+}
+
+
+
