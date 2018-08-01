@@ -6,6 +6,8 @@
 library(httr)
 library(dplyr)
 library(NbClust)
+library(ggplot2)
+library(plotly)
 #my own client ID and secret for the sake of the operation of the code.
 clientID <- 'xxxxxxxxx'
 secret <- 'xxxxxxxxx'
@@ -82,3 +84,9 @@ nbclust <- NbClust(songs_numbers, distance = 'manhattan',
 cluster_group <- nbclust$Best.partition
 pca <- prcomp(songs_numbers, scale = T)
 summary(pca)
+#up to pc3 accounts for 84.4% of the variance, up to pc2 accounts for 65.1%
+pca_df <- as.data.frame(pca$x)
+pca_df$cluster <- as.character(cluster_group)
+ggplot(pca_df, aes(x = PC1, y = PC2, color = cluster)) + geom_point() + ggtitle("Clustered songs and their PC1, PC2 values")
+#3d plot 
+
